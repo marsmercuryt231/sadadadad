@@ -272,18 +272,19 @@ local function run()
 end
 
 local function isEncounterStarting()
-    local battleGui = player.PlayerGui.MainGui:FindFirstChild("BattleGui")
-    if battleGui then return true end
-    
-    if game.Workspace.CurrentCamera.CameraType == Enum.CameraType.Scriptable then
-        if hrp then
-            hrp.CFrame = CFrame.new(0, 200, 0)
-        end
-        return true
-    end
-    
-    return false
+    return player.PlayerGui.MainGui:FindFirstChild("BattleGui") ~= nil
 end
+
+task.spawn(function()
+    while true do
+        if game.Workspace.CurrentCamera.CameraType == Enum.CameraType.Scriptable then
+            if hrp then
+                hrp.CFrame = CFrame.new(0, 300, 0)
+            end
+        end
+        task.wait(0.05)
+    end
+end)
 
 -- MAIN LOOP
 while true do
@@ -296,18 +297,17 @@ while true do
     end
 
     while raidCaveExists() do
-        if not isBattleActive() and not isEncounterStarting() then
-            for _, v in ipairs(workspace:GetDescendants()) do
-                if v.Name == "Egg" and v:IsA("BasePart") 
-                    and not v:IsDescendantOf(game.Workspace.CurrentCamera) 
-                    and game.Workspace.CurrentCamera.CameraType ~= "Scriptable" then
-                    if isEncounterStarting() then break end
-                    invisibleTeleportTo(v.CFrame)
-                    task.wait(0.5)
-                    if isEncounterStarting() then break end
-                end
+    if not isBattleActive() and not isEncounterStarting() then
+        for _, v in ipairs(workspace:GetDescendants()) do
+            if v.Name == "Egg" and v:IsA("BasePart") 
+                and not v:IsDescendantOf(game.Workspace.CurrentCamera) then
+                if isEncounterStarting() then break end
+                invisibleTeleportTo(v.CFrame)
+                task.wait(0.3)
+                if isEncounterStarting() then break end
             end
         end
-        task.wait()
     end
+    task.wait()
+end
 end
