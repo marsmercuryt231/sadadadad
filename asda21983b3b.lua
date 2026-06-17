@@ -271,27 +271,46 @@ local function run()
     end
 end
 
+local function isEncounterStarting()
+    local battleGui = player.PlayerGui.MainGui:FindFirstChild("BattleGui")
+    if battleGui then return true end
+    
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v.Name == "Egg" and v:IsA("BasePart") then
+            for _, child in ipairs(v:GetChildren()) do
+                if child:IsA("BillboardGui") then
+                    return true
+                end
+            end
+        end
+    end
+    
+    return false
+end
+
 -- MAIN LOOP
 while true do
     if not raidCaveExists() then
         run()
-
         if not waitForRaidCave(5) then
             task.wait(2)
             continue
         end
     end
 
-   while raidCaveExists() do
-    local battleGui = player.PlayerGui.MainGui:FindFirstChild("BattleGui")
-    if not isBattleActive() and not battleGui then
-        for _, v in ipairs(workspace:GetDescendants()) do
-            if v.Name == "Egg" and v:IsA("BasePart") and not v:IsDescendantOf(game.Workspace.CurrentCamera) and game.Workspace.CurrentCamera.CameraType ~= "Scriptable" then
-                invisibleTeleportTo(v.CFrame)
-                task.wait(0.5)
+    while raidCaveExists() do
+        if not isBattleActive() and not isEncounterStarting() then
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if v.Name == "Egg" and v:IsA("BasePart") 
+                    and not v:IsDescendantOf(game.Workspace.CurrentCamera) 
+                    and game.Workspace.CurrentCamera.CameraType ~= "Scriptable" then
+                    if isEncounterStarting() then break end
+                    invisibleTeleportTo(v.CFrame)
+                    task.wait(0.5)
+                    if isEncounterStarting() then break end
+                end
             end
         end
+        task.wait()
     end
-    task.wait()
-end
 end
