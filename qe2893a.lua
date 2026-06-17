@@ -11,7 +11,6 @@ local equivalency = {
     ["Silvent City"] = { location = "Silvent City" },
     ["Heiwa Village"] = { location = "Heiwa Village" },
     ["Route 8"] = {location = "POLUT Underwater Mining Lab"}
-    -- ADD MORE HERE
 }
 
 local char, hrp
@@ -23,6 +22,22 @@ if player.Character then
     bindCharacter(player.Character)
 end
 player.CharacterAdded:Connect(bindCharacter)
+
+local function click(button, xOffset, yOffset)
+    if button and button.Visible then
+        local absPos = button.AbsolutePosition
+        local absSize = button.AbsoluteSize
+
+        local x = math.floor(absPos.X + absSize.X * xOffset + 0.5)
+        local y = math.floor(absPos.Y + absSize.Y * yOffset + 0.5)
+
+        print("Clicking at:", x, y)
+
+        VIM:SendMouseButtonEvent(x, y, 0, true, game, 0)
+        task.wait(0.05)
+        VIM:SendMouseButtonEvent(x, y, 0, false, game, 0)
+    end
+end
 
 local function invisibleTeleportTo(cf)
     if not char or not hrp or not hrp.Parent then
@@ -40,13 +55,6 @@ local function pressKey(keyCode)
     task.wait(0.1)
     VIM:SendKeyEvent(false, keyCode, false, game)
     task.wait(0.3)
-end
-
-local function clickButton(button)
-    local pos = button.AbsolutePosition + Vector2.new(button.AbsoluteSize.X / 2, button.AbsoluteSize.Y * 2.5)
-    VIM:SendMouseButtonEvent(pos.X, pos.Y, 0, true, game, 1)
-    task.wait(0.1)
-    VIM:SendMouseButtonEvent(pos.X, pos.Y, 0, false, game, 1)
 end
 
 local function getTabButtons(mapMenu)
@@ -88,10 +96,7 @@ local function scrollToAndClick(button, locationsScrollingFrame)
         task.wait(0.2)
     end
 
-    local pos = button.AbsolutePosition + Vector2.new(button.AbsoluteSize.X / 2, button.AbsoluteSize.Y * 2.5)
-    VIM:SendMouseButtonEvent(pos.X, pos.Y, 0, true, game, 1)
-    task.wait(0.1)
-    VIM:SendMouseButtonEvent(pos.X, pos.Y, 0, false, game, 1)
+    click(button, 0.5, 4)
 end
 
 local function clickGeoHop(locationName, locationsScrollingFrame)
@@ -115,7 +120,6 @@ local function clickGeoHop(locationName, locationsScrollingFrame)
             end
         end
     end
-
 end
 
 local function waitForTeleport(timeout)
@@ -174,7 +178,6 @@ local function teleportToGate(destination)
         task.wait(0.1)
         elapsed += 0.1
     end
-
 end
 
 local function raidCaveExists()
@@ -220,7 +223,13 @@ local function run()
     local tabs = getTabButtons(mapMenu)
     if #tabs < 3 then return end
 
-    clickButton(tabs[3])
+    click(tabs[3], 0.5, 2.5)
+    wait()
+    click(tabs[3], 0.5, 3)
+    wait()
+    click(tabs[3], 0.5, 3.5)
+    wait()
+    click(tabs[3], 0.5, 4)
     task.wait(0.5)
 
     local forecastContainer = mapMenu:FindFirstChild("ForecastContainer")
@@ -248,7 +257,13 @@ local function run()
     local locationData = equivalency[weather]
     if not locationData then return end
 
-    clickButton(tabs[1])
+    click(tabs[1], 0.5, 2.5)
+    wait()
+    click(tabs[1], 0.5, 3)
+    wait()
+    click(tabs[1], 0.5, 3.5)
+    wait()
+    click(tabs[1], 0.5, 4)
     task.wait(0.5)
 
     local locationsScrollingFrame = mapMenu:FindFirstChild("ScrollingFrame")
@@ -271,9 +286,7 @@ while true do
             task.wait(2)
             continue
         end
-    else
     end
-
 
     while raidCaveExists() do
         if not isBattleActive() then
@@ -286,5 +299,4 @@ while true do
         end
         task.wait()
     end
-
 end
