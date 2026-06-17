@@ -224,11 +224,8 @@ local function run()
     if #tabs < 3 then return end
 
     click(tabs[3], 0.5, 2.5)
-    wait()
     click(tabs[3], 0.5, 3)
-    wait()
     click(tabs[3], 0.5, 3.5)
-    wait()
     click(tabs[3], 0.5, 4)
     task.wait(0.5)
 
@@ -258,11 +255,8 @@ local function run()
     if not locationData then return end
 
     click(tabs[1], 0.5, 2.5)
-    wait()
     click(tabs[1], 0.5, 3)
-    wait()
     click(tabs[1], 0.5, 3.5)
-    wait()
     click(tabs[1], 0.5, 4)
     task.wait(0.5)
 
@@ -293,7 +287,7 @@ while true do
             for _, v in ipairs(workspace:GetDescendants()) do
                 if v.Name == "Egg" and v:IsA("BasePart") and not v:IsDescendantOf(game.Workspace.CurrentCamera) and game.Workspace.CurrentCamera.CameraType ~= "Scriptable" then
                     invisibleTeleportTo(v.CFrame)
-                    task.wait(0.5)
+                    task.wait(0.3)
                 end
             end
         end
