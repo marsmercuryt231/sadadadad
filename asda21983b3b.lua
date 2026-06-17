@@ -282,15 +282,16 @@ while true do
         end
     end
 
-    while raidCaveExists() do
-        if not isBattleActive() then
-            for _, v in ipairs(workspace:GetDescendants()) do
-                if v.Name == "Egg" and v:IsA("BasePart") and not v:IsDescendantOf(game.Workspace.CurrentCamera) and game.Workspace.CurrentCamera.CameraType ~= "Scriptable" and not plat.Parent:FindFirstChild("Model") then
-                    invisibleTeleportTo(v.CFrame)
-                    task.wait(0.5)
-                end
+   while raidCaveExists() do
+    local battleGui = player.PlayerGui.MainGui:FindFirstChild("BattleGui")
+    if not isBattleActive() and not battleGui then
+        for _, v in ipairs(workspace:GetDescendants()) do
+            if v.Name == "Egg" and v:IsA("BasePart") and not v:IsDescendantOf(game.Workspace.CurrentCamera) and game.Workspace.CurrentCamera.CameraType ~= "Scriptable" then
+                invisibleTeleportTo(v.CFrame)
+                task.wait(0.5)
             end
         end
-        task.wait()
     end
+    task.wait()
+end
 end
