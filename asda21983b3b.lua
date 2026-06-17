@@ -275,14 +275,11 @@ local function isEncounterStarting()
     local battleGui = player.PlayerGui.MainGui:FindFirstChild("BattleGui")
     if battleGui then return true end
     
-    for _, v in ipairs(workspace:GetDescendants()) do
-        if v.Name == "Egg" and v:IsA("BasePart") then
-            for _, child in ipairs(v:GetChildren()) do
-                if child:IsA("BillboardGui") then
-                    return true
-                end
-            end
+    if game.Workspace.CurrentCamera.CameraType == Enum.CameraType.Scriptable then
+        if hrp then
+            hrp.CFrame = CFrame.new(0, 200, 0)
         end
+        return true
     end
     
     return false
