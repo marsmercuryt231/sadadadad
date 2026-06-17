@@ -1,30 +1,53 @@
     local Players = game.Players
     local player = Players.LocalPlayer
     local name = Players.LocalPlayer.Name
+    local Found = false
     local VIM = game:GetService("VirtualInputManager")
-    local curr = nil
-    local char = player.Character or player.CharacterAdded:Wait()
+    local canSpare = true
+    
+    webhook = "https://discord.com/api/webhooks/1516555190461796515/tvKNIanTmJaSjXE659Pr0HafDNeqhzOncJ4Oa22P5ThuwgZVLrMLRdtXEwqBfrSc8jAl"
     local http = game:GetService("HttpService")
-
-    webhook = "https://discord.com/api/webhooks/1265456711913967717/EBr6BGyIzXQjb-AmWWMrUn8QWl8nQ5E-KcRmnkFyexXlrR6kG1odMlIKHH7yW_KzTvcS"
-   function click(button, xOffset, yOffset)
-        if button and button.Visible then
-            local absPos = button.AbsolutePosition
-            local absSize = button.AbsoluteSize
-
-            local x = math.floor(absPos.X + absSize.X * xOffset + 0.5)
-            local y = math.floor(absPos.Y + absSize.Y * yOffset + 0.5)
-
-            print("Clicking at:", x, y)
-
-            -- Mouse down
-            VIM:SendMouseButtonEvent(x, y, 0, true, game, 0)
-            task.wait(0.05)
-            -- Mouse up
-            VIM:SendMouseButtonEvent(x, y, 0, false, game, 0)
+    local curr = nil
+    function click(button)
+        for i = 1, 2 do
+            VIM:SendMouseButtonEvent(button.AbsolutePosition.X+button.AbsoluteSize.X/2, button.AbsolutePosition.Y+button.AbsoluteSize.Y/0.7, false and 1 or 0, i == 1, nil, 0)
         end
     end
+    local UserInputService = game:GetService("UserInputService")
     
+    local spareCount = 0 
+
+    local Alphas = {
+        "Dakuda", "Cosmeleon", "Ikazune", "Dractus-anniv24", "Sharpod-anniv24", "Mirrami-anniv24", "Duskit", "Protogon", "Duskit-plush", "Scorb-sapphire", "Scorb-ruby", "Scorb-emerald"
+    }
+    
+    local Gammas = {
+        "Dakuda", "Cosmeleon", "Duskit", "Ikazune", "Protogon", "Glacadia", "Arceros", "Pyramind", "Vari", "Dractus-anniv24", "Sharpod-anniv24", "Mirrami-anniv24", "Duskit-plush", "Sharpod", "Skilava"
+    }
+    
+    function gleam()
+        local prefix = nil
+        for i, v in ipairs(game.Workspace:WaitForChild("chunk11"):GetDescendants()) do
+            if v.Name == "Aura" then
+                prefix = "Alpha"
+            end
+
+            if string.find(v.Name, "Wisp") then
+                prefix = "Gamma"
+            end
+        end
+
+        
+        return prefix
+    end
+
+
+    function clickPos(x, y)
+        for i = 1, 2 do
+            VIM:SendMouseButtonEvent(x, y, false and 1 or 0, i == 1, nil, 0)
+        end
+    end
+
     local function SendWebhook(msg)
         task.spawn(function()
             data = {
@@ -32,7 +55,7 @@
                 ["embeds"] = {
                     {
                         ["title"] = "Wilk Bot",
-                        ["description"] = player.Name.." has found a "..gleam(curr).." "..msg,
+                        ["description"] = player.Name.." has found a "..gleam().." "..msg,
                         ["type"] = "rich",
                         ["color"] = tonumber(string.format("0x%X", math.random(0x000000, 0xFFFFFF))),
                     }
@@ -49,241 +72,186 @@
         end)
     end
     
-  
-    function mouseMove(button, xOffset, yOffset)
-        if button and button.Visible then
-            local absPos = button.AbsolutePosition
-            local absSize = button.AbsoluteSize
+    local function check()
+        if game.Workspace:FindFirstChild("trickretreat").BuiltInBattleScenes.Model then
+        local Scene = game.Workspace:FindFirstChild("trickretreat").BuiltInBattleScenes.Model:GetChildren()
+        local imstupid = nil
+        for i, v in pairs(Scene) do
+            if (table.find(Alphas, v.Name) and gleam() == "Alpha") or (table.find(Gammas, v.Name) and gleam() == "Gamma") or (v.Name == "Ikazune") then
+                Found = true
+                curr = v.Name
+                local foe = player.PlayerGui.BackGui:WaitForChild("Frame"):WaitForChild("FoeHealthGui")
+                for i, v in ipairs(foe:GetDescendants()) do
+                    if v.Name == "Frame" then
+                        if math.round(v.AbsolutePosition.X) == 603 and math.round(v.AbsolutePosition.Y) == 92 then
+                            if v.AbsoluteSize.X > 5 then
+                                canSpare = true
+                            else
+                                canSpare = false
+                            end
+                        end
+                    end
+                end
+                return
+            end
+        end
+        local Frame = Players.LocalPlayer.PlayerGui.MainGui
 
-            local x = math.floor(absPos.X + absSize.X * xOffset + 0.5)
-            local y = math.floor(absPos.Y + absSize.Y * yOffset + 0.5)
+
+        if Frame and Frame:FindFirstChild("BattleGui") then
+            local run = Frame:FindFirstChild("BattleGui").Run
+            click(run)
+        end
+        Found = false
+    end
+    end
+    function idum()
+    while true do
+    check()
+    wait(0.5)
+    end
+    end
+    
+    function no()
+        while true do
+
+            if Players.LocalPlayer.PlayerGui.FrontGui and Players.LocalPlayer.PlayerGui.FrontGui:FindFirstChild("YesOrNoPrompt") then
+
+                local YesNo  = Players.LocalPlayer.PlayerGui.FrontGui.YesOrNoPrompt:GetChildren()
+                local answer = {}
+
+                for i, v in pairs(YesNo) do
+                    if Players.LocalPlayer.PlayerGui.FrontGui and Players.LocalPlayer.PlayerGui.FrontGui:FindFirstChild("YesOrNoPrompt") then
+                            
+                        local YesNo  = Players.LocalPlayer.PlayerGui.FrontGui.YesOrNoPrompt
+                        local answer = {}
+                        
+                        for i, v in pairs(YesNo:GetChildren()) do
+                            if v:IsA("ImageButton") then
+                                table.insert(answer, v)
+                            end
+                        end
+                        if YesNo.Visible == true then
+                            click(answer[2])
+                            SendWebhook(curr)
+                            wait(1)
+                            canSpare = true
+
+                        end
+                    end
+                    wait(0.05)
+                end
+            end
+            wait()
+        end
+    end
+
+    --771860314 particle id
+    function spare()
+        if player.PlayerGui.MainGui and player.PlayerGui.MainGui:FindFirstChild("BattleGui") then
+            clickPos(328 + 144, 249 + 59)
+            wait(0.2)
+            clickPos(328 + 144, 249 + 50)
+            wait(1)
+            clickPos(85+144, 218+59)
+            wait(0.2)
+            clickPos(85+144, 218+59)
+        end
+        spareCount += 1    
+        if spareCount < 2 then
+            spare()
+        end
+    end
+
+    function cursor()
+        while true do
+            if not game.Workspace:FindFirstChild("trickretreat").BuiltInBattleScenes.Model then
+                clickPos(400, 200)
+                local main = game:GetService("Players").HelloMotherIdo.PlayerGui.MainGui
+                if main:FindFirstChild("Frame") then
+                    for i, v in ipairs(main.Frame:GetChildren()) do
+                        if v:IsA("ImageLabel") and v.Visible == true and Color3.fromRGB(49, 202, 113) then
+                            VIM:SendMouseMoveEvent(v.AbsolutePosition.X+v.AbsoluteSize.X/2, v.AbsolutePosition.Y+v.AbsoluteSize.Y/1.2, nil)
+                            wait()
+                        end
+                    end
+                end
+                wait()
+            end
+            wait()
+        end
+    end
+
+    --local cursorTask = coroutine.create(cursor)
+    --coroutine.resume(cursorTask)
+    local checkTask = coroutine.create(idum)
+    coroutine.resume(checkTask)
+    local noTask = coroutine.create(no)
+    coroutine.resume(noTask)
+
+
+    while true do
+    if Found == true then
+        local items = nil
+        local fight = nil
+        
+        local Elements = Players.LocalPlayer.PlayerGui.MainGui:WaitForChild("BattleGui")
+        for i, v in pairs(Elements:GetChildren()) do
+            if v.Name == "ImageLabel" then
+                if v.ImageColor3 == Color3.fromRGB(255, 204, 102) then
+                items = v.Button
+                end
+            end
+        end
+        for i, v in pairs(Elements:GetChildren()) do
+            if v.Name == "ImageLabel" then
+                if v.ImageColor3 == Color3.fromRGB(255, 102, 102) then
+                    fight = v.Button
+                end
+            end
+        end
+
+
+        if spareCount < 2 then
+            spare()
+        else 
+            spareCount = 0
+        end
 
         
-            VIM:SendMouseMoveEvent(x, y, nil)
 
-        end
-    end 
-    local UserInputService = game:GetService("UserInputService")
-    
-    
+        wait(0.1)
+        click(items)
+        wait(0.2)
 
-    local Alphas = {
-        "faberge", "star", "kyeggo-r", "pattern"
-    }
-    
-    local Gammas = {
-        "faberge", "star", "kyeggo-r", "pattern"
-    }
-    
-    local temp = {
-        "kyeggo-r"
-    }
-
-
-    function findButton(container, options)
-    for _, obj in ipairs(container:GetDescendants()) do
-        if not options.className or obj.ClassName == options.className or obj.Name == options.className then
-            local isMatch = true
-
-            if options.text then
-                local textMatch = false
-                for _, child in ipairs(obj:GetChildren()) do
-                    if (child:IsA("TextLabel") or child:IsA("TextButton")) and string.find(child.Text, options.text) then
-                        textMatch = true
-                        break
-                    end
-                end
-                isMatch = isMatch and textMatch
+        if Players.LocalPlayer.PlayerGui.MainGui:WaitForChild("WatchContainer"):FindFirstChild("BagMenu") then
+            local Bag = Players.LocalPlayer.PlayerGui.MainGui:WaitForChild("WatchContainer"):WaitForChild("BagMenu"):WaitForChild("Frame"):WaitForChild("BattleContainer"):WaitForChild("DiscContainer"):WaitForChild("ContentContainer")
+            wait(1)
+            if curr == "Duskit-plush" and gleam() == "Gamma" then
+                click(Bag:GetChildren()[2])
+            else
+                click(Bag:GetChildren()[1])
             end
-
-            if options.color then
-                if obj:IsA("ImageLabel") then
-                    isMatch = isMatch and (obj.ImageColor3 == options.color)
-                elseif obj:IsA("GuiObject") then
-                    isMatch = isMatch and (obj.BackgroundColor3 == options.color)
-                else
-                    isMatch = false
+            wait(0.5)
+            local BattleDetails = Players.LocalPlayer.PlayerGui.MainGui:WaitForChild("WatchContainer"):WaitForChild("BagMenu"):WaitForChild("Frame"):WaitForChild("BattleDetailsContainer")
+            local real = {}
+            for i, v in pairs(BattleDetails:GetChildren()) do
+                if v:IsA("ImageButton") then
+                    table.insert(real, v)
                 end
             end
 
-            if options.childName then
-                isMatch = isMatch and obj:FindFirstChild(options.childName) ~= nil
+            for i = 1, 2 do
+                VIM:SendMouseButtonEvent(real[1].AbsolutePosition.X+real[1].AbsoluteSize.X/2, real[1].AbsolutePosition.Y+real[1].AbsoluteSize.Y/0.5, false and 1 or 0, i == 1, nil, 0)
             end
 
-            if isMatch then
-                return obj
-            end
+            wait(0.5)
         end
+  
     end
 
-    return nil
-end
+    wait()
+    end
 
     
-function gleam(entity)
-    local prefix = nil
-    for _, v in ipairs(entity:GetDescendants()) do
-        if v.Name == "Aura" then
-            prefix = "Alpha"
-        end
-        if string.find(v.Name, "Wisp") then
-            prefix = "Gamma"
-        end
-    end
-    if prefix == nil then prefix = "Normal" end
-    return prefix
-end
-
-
-    function clickPos(x, y)
-        for i = 1, 2 do
-            VIM:SendMouseButtonEvent(x, y, false and 1 or 0, i == 1, nil, 0)
-        end
-    end
-
-   -- helper: does `str` contain ANY entry from `tbl` as a substring? (case-insensitive, plain text)
-    local function containsSubstringFromTable(str, tbl)
-        str = string.lower(str)
-        for _, word in ipairs(tbl) do
-            if string.find(str, string.lower(word), 1, true) then
-                return true
-            end
-        end
-        return false
-    end
-
-
-local function runEncounterActions()
-    print("FOUND")
-    local items = nil
-    local mainFrame = Players.LocalPlayer.PlayerGui.MainGui:FindFirstChild("Frame")
-    local battleGui = mainFrame and mainFrame:FindFirstChild("BattleGui")
-    if not battleGui then
-        print("no battle")
-        return false
-    end
-    local okButton = findButton(battleGui, {color = Color3.fromRGB(255, 204, 102)})
-    if not okButton then
-        print("no ok ")
-        return false
-    end
-    click(okButton, 0.5, 1.2)
-    wait(0.1)
-    click(okButton, 0.5, 1.2)
-    print(okButton.Name)
-    wait(0.2)
-
-    local watchContainer = Players.LocalPlayer.PlayerGui.MainGui:FindFirstChild("WatchContainer")
-    local bagMenu = watchContainer and watchContainer:FindFirstChild("BagMenu")
-
-    if not (bagMenu and bagMenu.Visible) then
-        return false
-    end
-
-    local Bag = bagMenu:WaitForChild("Frame"):WaitForChild("BattleContainer"):WaitForChild("DiscContainer"):WaitForChild("ContentContainer")
-    wait(1)
-    click(Bag:GetChildren()[1], 0.75, 1.6)
-    click(Bag:GetChildren()[1], 0.75, 1.6)
-
-    wait(0.5)
-    local BattleDetails = bagMenu:WaitForChild("Frame"):WaitForChild("BattleDetailsContainer")
-    local real = {}
-    for i, v in pairs(BattleDetails:GetChildren()) do
-        if v:IsA("ImageButton") then
-            table.insert(real, v)
-        end
-    end
-    click(real[1], 0.75, 1)
-    click(real[1], 0.75, 2)
-    click(real[1], 0.75, 2.5)
-    wait(0.5)
-
-    print("true")
-    return true
-end
-
-
-local function onEncounterStart(plat)
-    print("entered")
-    task.wait(0.2)
-    print("after wait")
-    while true do
-        local Scene = plat.Parent:GetDescendants()
-        print("scene size:", #Scene)
-        for _, v in ipairs(Scene) do
-            if v.Name ~= "Plat21" then
-                local kind = gleam(v)
-                print(v.Name, kind)
-                if (containsSubstringFromTable(v.Name, Alphas) and kind == "Alpha")
-                    or (containsSubstringFromTable(v.Name, Gammas) and kind == "Gamma")
-                    or (containsSubstringFromTable(v.Name, temp)) then
-                    curr = v
-                    while true do
-                        runEncounterActions()
-                        local mainFrame = Players.LocalPlayer.PlayerGui.MainGui
-                        local battleGui = mainFrame and mainFrame:FindFirstChild("BattleGui")
-                        if not battleGui then
-                            return
-                        end
-                        task.wait(0.3)
-                    end
-                end
-            end
-        end
-        -- nothing matched, try clicking Run
-        local Frame = Players.LocalPlayer.PlayerGui.MainGui
-        local battleGui = Frame and Frame:FindFirstChild("BattleGui")
-        print("battleGui:", battleGui)
-        if not battleGui then
-            return
-        end
-        local run = battleGui.Run
-        click(run, 0.5, 1)
-        click(run, 0.5, 1)
-        print("made it here")
-        task.wait(0.5)
-        Frame = Players.LocalPlayer.PlayerGui.MainGui
-        if not (Frame and Frame:FindFirstChild("BattleGui")) then
-            return
-        end
-    end
-end
-
-local function onEncounterEnd()
-    if curr then
-        SendWebhook(curr.Name)
-    end
-    curr = nil
-end
-
-local mainGui = player.PlayerGui:WaitForChild("MainGui")
-
-mainGui.DescendantAdded:Connect(function(child)
-    if child.Name == "BattleGui" then
-        task.wait(0.2)
-        local plat = game.Workspace:FindFirstChild("Plat21", true)
-        if plat then
-            onEncounterStart(plat)
-        end
-    end
-end)
-
-mainGui.DescendantRemoving:Connect(function(child)
-    if child.Name == "BattleGui" then
-        onEncounterEnd()
-    end
-end)
-    
-   
---771860314 particle id
-
-while true do
-    for _, v in ipairs(game.Workspace:GetDescendants()) do
-        if v:IsA("Model") and string.find(string.lower(v.Name), "trainer", 1, true) then
-            v:Destroy()
-        end
-    end
-    task.wait(1)
-end
-
 
