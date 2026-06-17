@@ -23,6 +23,9 @@ if player.Character then
 end
 player.CharacterAdded:Connect(bindCharacter)
 
+
+
+
 local function click(button, xOffset, yOffset)
     if button and button.Visible then
         local absPos = button.AbsolutePosition
@@ -271,20 +274,34 @@ local function run()
     end
 end
 
-local function isEncounterStarting()
-    return player.PlayerGui.MainGui:FindFirstChild("BattleGui") ~= nil
-end
+
+local encounterFiring = false
+
+local originalInvoke
+originalInvoke = hookfunction(Instance.new("RemoteFunction").InvokeServer, newcclosure(function(self, ...)
+    local args = {...}
+    if args[2] == "BattleFunction" and args[3] == "new" then
+        print("BATTLE CREATED - FLEEING")
+        encounterFiring = true
+        if hrp then
+            hrp.CFrame = CFrame.new(0, 10000, 0)
+        end
+    end
+    return originalInvoke(self, ...)
+end))
 
 task.spawn(function()
     while true do
-        if game.Workspace.CurrentCamera.CameraType == Enum.CameraType.Scriptable then
-            if hrp then
-                hrp.CFrame = CFrame.new(0, 300, 0)
-            end
+        if encounterFiring and not player.PlayerGui.MainGui:FindFirstChild("BattleGui") then
+            encounterFiring = false
         end
-        task.wait(0.05)
+        task.wait(1)
     end
 end)
+
+local function isEncounterStarting()
+    return encounterFiring
+end
 
 -- MAIN LOOP
 while true do
@@ -297,17 +314,17 @@ while true do
     end
 
     while raidCaveExists() do
-    if not isBattleActive() and not isEncounterStarting() then
-        for _, v in ipairs(workspace:GetDescendants()) do
-            if v.Name == "Egg" and v:IsA("BasePart") 
-                and not v:IsDescendantOf(game.Workspace.CurrentCamera) then
-                if isEncounterStarting() then break end
-                invisibleTeleportTo(v.CFrame)
-                task.wait(1)
-                if isEncounterStarting() then break end
+        if not isEncounterStarting() then
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if v.Name == "Egg" and v:IsA("BasePart")
+                    and not v:IsDescendantOf(game.Workspace.CurrentCamera) then
+                    if isEncounterStarting() then break end
+                    invisibleTeleportTo(v.CFrame)
+                    task.wait(0.2)
+                    if isEncounterStarting() then break end
+                end
             end
         end
+        task.wait()
     end
-    task.wait()
-end
 end
