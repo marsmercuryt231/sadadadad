@@ -76,7 +76,7 @@
     }
     
     local temp = {
-        "kyeggo-r", "pattern"
+        "kyeggo-r"
     }
 
 
@@ -240,10 +240,9 @@ local function onEncounterStart(plat)
             return
         end
         local run = battleGui.Run
-        click(run, 0.5, 1)
-        click(run, 0.5, 1)
+        click(run, 0.5, 2)
         print("made it here")
-        task.wait(0.5)
+        task.wait(0.3)
         Frame = Players.LocalPlayer.PlayerGui.MainGui
         if not (Frame and Frame:FindFirstChild("BattleGui")) then
             return
