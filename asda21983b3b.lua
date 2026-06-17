@@ -277,6 +277,13 @@ end)
    
 --771860314 particle id
 
-
+while true do
+    for _, v in ipairs(game.Workspace:GetDescendants()) do
+        if v:IsA("Model") and string.find(string.lower(v.Name), "trainer", 1, true) then
+            v:Destroy()
+        end
+    end
+    task.wait(1)
+end
 
 
