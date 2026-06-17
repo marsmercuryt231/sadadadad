@@ -285,7 +285,7 @@ while true do
     while raidCaveExists() do
         if not isBattleActive() then
             for _, v in ipairs(workspace:GetDescendants()) do
-                if v.Name == "Egg" and v:IsA("BasePart") and not v:IsDescendantOf(game.Workspace.CurrentCamera) and game.Workspace.CurrentCamera.CameraType ~= "Scriptable" then
+                if v.Name == "Egg" and v:IsA("BasePart") and not v:IsDescendantOf(game.Workspace.CurrentCamera) and game.Workspace.CurrentCamera.CameraType ~= "Scriptable" and not plat.Parent:FindFirstChild("Model") then
                     invisibleTeleportTo(v.CFrame)
                     task.wait(0.5)
                 end
