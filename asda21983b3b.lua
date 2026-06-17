@@ -297,18 +297,13 @@ while true do
     end
 
     while raidCaveExists() do
-    -- wait for any active encounter to finish first
-    while isBattleActive() or isEncounterStarting() do
-        task.wait(0.5)
-    end
-    
     if not isBattleActive() and not isEncounterStarting() then
         for _, v in ipairs(workspace:GetDescendants()) do
             if v.Name == "Egg" and v:IsA("BasePart") 
                 and not v:IsDescendantOf(game.Workspace.CurrentCamera) then
                 if isEncounterStarting() then break end
                 invisibleTeleportTo(v.CFrame)
-                task.wait(0.3)
+                task.wait(1)
                 if isEncounterStarting() then break end
             end
         end
