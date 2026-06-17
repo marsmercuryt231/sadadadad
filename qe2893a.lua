@@ -1,0 +1,290 @@
+local VIM = game:GetService("VirtualInputManager")
+local player = game.Players.LocalPlayer
+
+local equivalency = {
+    ["Route 6"] = { location = "Rally Ranch" },
+    ["Route 3"] = { location = "Silvent City", gate = "Route 3" },
+    ["Route 4"] = { location = "Silvent City", gate = "Route 4" },
+    ["Sepharite Junkyard"] = { location = "Sepharite City", gate = "Route 7" },
+    ["Cheshma Town"] = { location = "Cheshma Town" },
+    ["Sepharite City"] = { location = "Sepharite City" },
+    ["Silvent City"] = { location = "Silvent City" },
+    ["Heiwa Village"] = { location = "Heiwa Village" },
+    ["Route 8"] = {location = "POLUT Underwater Mining Lab"}
+    -- ADD MORE HERE
+}
+
+local char, hrp
+local function bindCharacter(c)
+    char = c
+    hrp = char:WaitForChild("HumanoidRootPart")
+end
+if player.Character then
+    bindCharacter(player.Character)
+end
+player.CharacterAdded:Connect(bindCharacter)
+
+local function invisibleTeleportTo(cf)
+    if not char or not hrp or not hrp.Parent then
+        local c = player.Character or player.CharacterAdded:Wait()
+        bindCharacter(c)
+    end
+    hrp.Parent = nil
+    hrp.CFrame = cf
+    task.wait()
+    hrp.Parent = char
+end
+
+local function pressKey(keyCode)
+    VIM:SendKeyEvent(true, keyCode, false, game)
+    task.wait(0.1)
+    VIM:SendKeyEvent(false, keyCode, false, game)
+    task.wait(0.3)
+end
+
+local function clickButton(button)
+    local pos = button.AbsolutePosition + Vector2.new(button.AbsoluteSize.X / 2, button.AbsoluteSize.Y * 2.5)
+    VIM:SendMouseButtonEvent(pos.X, pos.Y, 0, true, game, 1)
+    task.wait(0.1)
+    VIM:SendMouseButtonEvent(pos.X, pos.Y, 0, false, game, 1)
+end
+
+local function getTabButtons(mapMenu)
+    local buttons = {}
+    for _, child in ipairs(mapMenu:GetChildren()) do
+        if child:IsA("ImageButton") then
+            table.insert(buttons, child)
+        end
+    end
+    table.sort(buttons, function(a, b)
+        return a.AbsolutePosition.X < b.AbsolutePosition.X
+    end)
+    return buttons
+end
+
+local function getWeatherFromFrame(frame)
+    for _, child in ipairs(frame:GetChildren()) do
+        if child.Name == "Frame" and #child:GetChildren() == 2 then
+            local textLabel = child:FindFirstChildOfClass("TextLabel")
+            if textLabel then
+                return textLabel.Text
+            end
+        end
+    end
+    return nil
+end
+
+local function scrollToAndClick(button, locationsScrollingFrame)
+    if not button then return end
+
+    local buttonY = button.AbsolutePosition.Y
+    local frameY = locationsScrollingFrame.AbsolutePosition.Y
+    local frameHeight = locationsScrollingFrame.AbsoluteSize.Y
+
+    if buttonY < frameY or buttonY > frameY + frameHeight then
+        local currentCanvas = locationsScrollingFrame.CanvasPosition.Y
+        local relativeY = buttonY - frameY + currentCanvas - (frameHeight / 2)
+        locationsScrollingFrame.CanvasPosition = Vector2.new(0, relativeY)
+        task.wait(0.2)
+    end
+
+    local pos = button.AbsolutePosition + Vector2.new(button.AbsoluteSize.X / 2, button.AbsoluteSize.Y * 2.5)
+    VIM:SendMouseButtonEvent(pos.X, pos.Y, 0, true, game, 1)
+    task.wait(0.1)
+    VIM:SendMouseButtonEvent(pos.X, pos.Y, 0, false, game, 1)
+end
+
+local function clickGeoHop(locationName, locationsScrollingFrame)
+    if not locationName then return end
+
+    for _, desc in ipairs(locationsScrollingFrame:GetDescendants()) do
+        if desc:IsA("TextLabel") and desc.Text == locationName then
+            local cityFrame = desc.Parent
+            if not cityFrame then continue end
+            local outerFrame = cityFrame.Parent
+            if not outerFrame then continue end
+
+            for _, sibling in ipairs(outerFrame:GetChildren()) do
+                if sibling:IsA("Frame") and sibling ~= cityFrame then
+                    local button = sibling:FindFirstChildOfClass("ImageButton")
+                    if button then
+                        scrollToAndClick(button, locationsScrollingFrame)
+                        return
+                    end
+                end
+            end
+        end
+    end
+
+end
+
+local function waitForTeleport(timeout)
+    local startPos = player.Character.HumanoidRootPart.Position
+    local elapsed = 0
+    while elapsed < timeout do
+        task.wait(0.5)
+        elapsed += 0.5
+        local character = player.Character
+        if character then
+            local newPos = character.HumanoidRootPart.Position
+            if (newPos - startPos).Magnitude > 100 then
+                task.wait(1)
+                return true
+            end
+        end
+    end
+    return false
+end
+
+local function waitForGate(destination, timeout)
+    local elapsed = 0
+    while elapsed < timeout do
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj.Name == "Gate" then
+                local marquee = obj:FindFirstChild("Marquee")
+                if marquee then
+                    local mtext = marquee:FindFirstChild("MText")
+                    if mtext and mtext.Value == destination then
+                        return marquee
+                    end
+                end
+            end
+        end
+        task.wait(0.5)
+        elapsed += 0.5
+    end
+    return nil
+end
+
+local function teleportToGate(destination)
+    local marquee = waitForGate(destination, 10)
+    if not marquee then print("Gate not found after timeout:", destination) return end
+
+    local targetCFrame = CFrame.new(marquee.Position - Vector3.new(0, 10, 0))
+
+    local elapsed = 0
+    while elapsed < 3 do
+        local character = player.Character
+        if character then
+            local rootPart = character:FindFirstChild("HumanoidRootPart")
+            if rootPart then
+                rootPart.CFrame = targetCFrame
+            end
+        end
+        task.wait(0.1)
+        elapsed += 0.1
+    end
+
+end
+
+local function raidCaveExists()
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v.Name == "RaidCaveModel" then
+            return true
+        end
+    end
+    return false
+end
+
+local function waitForRaidCave(timeout)
+    local elapsed = 0
+    while elapsed < timeout do
+        if raidCaveExists() then
+            return true
+        end
+        task.wait(1)
+        elapsed += 1
+    end
+    return false
+end
+
+local function isBattleActive()
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v.Name == "BuiltInBattleScenes" and v:FindFirstChild("Model") then
+            return true
+        end
+    end
+    return false
+end
+
+local function run()
+    local watchContainer = player.PlayerGui.MainGui:FindFirstChild("WatchContainer")
+    if not watchContainer then return end
+
+    pressKey(Enum.KeyCode.Three)
+    task.wait(0.5)
+
+    local mapMenu = watchContainer:FindFirstChild("MapMenu")
+    if not mapMenu then return end
+
+    local tabs = getTabButtons(mapMenu)
+    if #tabs < 3 then return end
+
+    clickButton(tabs[3])
+    task.wait(0.5)
+
+    local forecastContainer = mapMenu:FindFirstChild("ForecastContainer")
+    if not forecastContainer then return end
+
+    local timelineVertical = forecastContainer:FindFirstChild("TimelineVertical")
+    if not timelineVertical then return end
+
+    local frames = {}
+    for _, child in ipairs(timelineVertical.Parent:GetChildren()) do
+        if child.Name == "Frame" then
+            table.insert(frames, child)
+        end
+    end
+    table.sort(frames, function(a, b)
+        return a.AbsolutePosition.Y < b.AbsolutePosition.Y
+    end)
+
+    if #frames == 0 then return end
+
+    local weather = getWeatherFromFrame(frames[1])
+    print("Current weather:", weather)
+    if not weather then return end
+
+    local locationData = equivalency[weather]
+    if not locationData then return end
+
+    clickButton(tabs[1])
+    task.wait(0.5)
+
+    local locationsScrollingFrame = mapMenu:FindFirstChild("ScrollingFrame")
+    if not locationsScrollingFrame then return end
+
+    clickGeoHop(locationData.location, locationsScrollingFrame)
+
+    if locationData.gate then
+        waitForTeleport(10)
+        teleportToGate(locationData.gate)
+    end
+end
+
+-- MAIN LOOP
+while true do
+    if not raidCaveExists() then
+        run()
+
+        if not waitForRaidCave(5) then
+            task.wait(2)
+            continue
+        end
+    else
+    end
+
+
+    while raidCaveExists() do
+        if not isBattleActive() then
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if v.Name == "Egg" and v:IsA("BasePart") and not v:IsDescendantOf(game.Workspace.CurrentCamera) and game.Workspace.CurrentCamera.CameraType ~= "Scriptable" then
+                    invisibleTeleportTo(v.CFrame)
+                    task.wait(0.5)
+                end
+            end
+        end
+        task.wait()
+    end
+
+end
