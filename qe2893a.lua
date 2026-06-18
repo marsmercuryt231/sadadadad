@@ -124,7 +124,9 @@ function gleam(entity)
     local prefix = nil
     for _, v in ipairs(entity:GetDescendants()) do
         if v.Name == "Aura" then
-            prefix = "Alpha"
+            if v.Texture == 771860314 then
+                prefix = "Alpha"
+            end
         end
         if string.find(v.Name, "Wisp") then
             prefix = "Gamma"
