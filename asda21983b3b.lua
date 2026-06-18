@@ -49,8 +49,7 @@ local function invisibleTeleportTo(cf)
     end
     hrp.Parent = nil
     hrp.CFrame = cf
-    task.wait()
-    hrp.Parent = char
+    hrp.Parent = char -- no task.wait() here
 end
 
 local function pressKey(keyCode)
@@ -284,6 +283,9 @@ originalInvoke = hookfunction(Instance.new("RemoteFunction").InvokeServer, newcc
         print("BATTLE CREATED - FLEEING")
         encounterFiring = true
         if hrp then
+            if not hrp.Parent then
+                hrp.Parent = char -- reparent first if mid-teleport
+            end
             hrp.CFrame = CFrame.new(0, 10000, 0)
         end
     end
