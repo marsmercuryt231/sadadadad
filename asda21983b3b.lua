@@ -25,7 +25,19 @@ end
 player.CharacterAdded:Connect(bindCharacter)
 
 
-
+local function isTooCloseToDoor(position)
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v.Name == "Main" and v:IsA("BasePart") then
+            local parent = v.Parent
+            if parent and parent.Name == "Door" then
+                if (v.Position - position).Magnitude < 20 then
+                    return true
+                end
+            end
+        end
+    end
+    return false
+end
 
 local function click(button, xOffset, yOffset)
     if button and button.Visible then
@@ -319,8 +331,8 @@ while true do
     while raidCaveExists() do
         if not isEncounterStarting() then
             for _, v in ipairs(workspace:GetDescendants()) do
-                if v.Name == "Egg" and v:IsA("BasePart")
-                    and not v:IsDescendantOf(game.Workspace.CurrentCamera) then
+                if v.Name == "Egg" and v:IsA("BasePart") 
+                    and not v:IsDescendantOf(game.Workspace.CurrentCamera) and not isTooCloseToDoor(v.Position) then
                     if isEncounterStarting() then break end
                     invisibleTeleportTo(v.CFrame)
                     task.wait()
