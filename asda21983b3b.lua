@@ -10,7 +10,8 @@ local equivalency = {
     ["Sepharite City"] = { location = "Sepharite City" },
     ["Silvent City"] = { location = "Silvent City" },
     ["Heiwa Village"] = { location = "Heiwa Village" },
-    ["Route 8"] = {location = "POLUT Underwater Mining Lab"}
+    ["Route 8"] = {location = "POLUT Underwater Mining Lab"},
+    ["Atlanthian City"] = {location = "Atlanthian City - Living District"}
 }
 
 local char, hrp
