@@ -282,6 +282,9 @@ while true do
         if v:IsA("Model") and string.find(string.lower(v.Name), "trainer", 1, true) then
             v:Destroy()
         end
+        if v.Name == "Door" and v.Parent.Name ~= "Gate" then
+            v:Destroy()
+        end
     end
     task.wait(1)
 end
