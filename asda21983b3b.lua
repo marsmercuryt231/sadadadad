@@ -322,7 +322,7 @@ while true do
                     and not v:IsDescendantOf(game.Workspace.CurrentCamera) then
                     if isEncounterStarting() then break end
                     invisibleTeleportTo(v.CFrame)
-                    task.wait(0.5)
+                    task.wait(0.1)
                     if isEncounterStarting() then break end
                 end
             end
