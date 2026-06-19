@@ -14,6 +14,8 @@ local equivalency = {
     ["Atlanthian City"] = {location = "Atlanthian City - Living District"}
 }
 
+local isGeohopping = false
+
 local char, hrp
 local function bindCharacter(c)
     char = c
@@ -38,6 +40,7 @@ local function isTooCloseToDoor(position)
     end
     return false
 end
+
 
 local function click(button, xOffset, yOffset)
     if button and button.Visible then
@@ -174,8 +177,10 @@ local function waitForGate(destination, timeout)
     end
     return nil
 end
+local isTeleportingToGate = false
 
 local function teleportToGate(destination)
+    isTeleportingToGate = true
     local marquee = waitForGate(destination, 10)
     if not marquee then print("Gate not found after timeout:", destination) return end
 
@@ -193,6 +198,7 @@ local function teleportToGate(destination)
         task.wait(1)
         elapsed += 1
     end
+    isTeleportingToGate = false
 end
 
 local function raidCaveExists()
@@ -321,18 +327,20 @@ end
 -- MAIN LOOP
 while true do
     if not raidCaveExists() then
+        isGeohopping = true
         run()
-        if not waitForRaidCave(5) then
-            task.wait(2)
-            continue
-        end
-    end
+        waitForRaidCave(5)  -- this already waits for the new chunk
+        task.wait(2)        -- little extra buffer after chunk loads
+        isGeohopping = false
+        continue
+    end 
 
-    while raidCaveExists() do
-        if not isEncounterStarting() then
+        while raidCaveExists() do
+        if not isEncounterStarting() and not isGeohopping and not isTeleportingToGate then  -- add isGeohopping check
             for _, v in ipairs(workspace:GetDescendants()) do
-                if v.Name == "Egg" and v:IsA("BasePart") 
-                    and not v:IsDescendantOf(game.Workspace.CurrentCamera) and not isTooCloseToDoor(v.Position) then
+                if v.Name == "Egg" and v:IsA("BasePart")
+                    and not v:IsDescendantOf(workspace.CurrentCamera)
+                    and not isTooCloseToDoor(v.Position) then
                     if isEncounterStarting() then break end
                     invisibleTeleportTo(v.CFrame)
                     task.wait()
