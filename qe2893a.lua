@@ -68,11 +68,11 @@
     
 
     local Alphas = {
-        "faberge", "star", "kyeggo-r", "pattern", "fab"
+        "star", "kyeggo-r", "pattern", "fab"
     }
     
     local Gammas = {
-        "faberge", "star", "kyeggo-r", "pattern", "fab"
+        "star", "kyeggo-r", "pattern", "fab"
     }
     
     local temp = {
