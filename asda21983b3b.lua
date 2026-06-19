@@ -190,8 +190,8 @@ local function teleportToGate(destination)
                 rootPart.CFrame = targetCFrame
             end
         end
-        task.wait(0.1)
-        elapsed += 0.1
+        task.wait(1)
+        elapsed += 1
     end
 end
 
