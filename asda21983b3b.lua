@@ -305,7 +305,7 @@ originalInvoke = hookfunction(Instance.new("RemoteFunction").InvokeServer, newcc
             if not hrp.Parent then
                 hrp.Parent = char -- reparent first if mid-teleport
             end
-            hrp.CFrame = CFrame.new(0, 10000, 0)
+            --hrp.CFrame = CFrame.new(0, 10000, 0)
         end
     end
     return originalInvoke(self, ...)
@@ -324,7 +324,7 @@ local function isEncounterStarting()
     return encounterFiring
 end
 
-local HopInterval = 100 -- 35 minutes in seconds
+local HopInterval = 30 -- 35 minutes in seconds
 
 local isHoppingTime = false 
 
