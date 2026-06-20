@@ -285,6 +285,7 @@ end)
 
 
 
+
 local PlayerGui = player:WaitForChild("PlayerGui")
 
 local function checkPrompt(promptGui)
@@ -297,12 +298,14 @@ local function checkPrompt(promptGui)
         end
     end
 
-    if answer[2] then
-        GuiService.SelectedObject = answer[2]
-        task.wait(0.4)
-        pressKey(Enum.KeyCode.Return)
-        task.wait(0.4)
+    if not answer[2] then return end
+
+    local startTime = tick()
+    while promptGui.Visible and (tick() - startTime) < 30 do
+        click(answer[2], 2, 4)
+        task.wait(0.5)
     end
+
 end
 
 PlayerGui.DescendantAdded:Connect(function(descendant)
