@@ -305,7 +305,7 @@ originalInvoke = hookfunction(Instance.new("RemoteFunction").InvokeServer, newcc
             if not hrp.Parent then
                 hrp.Parent = char -- reparent first if mid-teleport
             end
-            --hrp.CFrame = CFrame.new(0, 10000, 0)
+            hrp.CFrame = CFrame.new(0, 10000, 0)
         end
     end
     return originalInvoke(self, ...)
@@ -324,6 +324,55 @@ local function isEncounterStarting()
     return encounterFiring
 end
 
+local HopInterval = 300 -- 35 minutes in seconds
+
+local isHoppingTime = false 
+
+local function executeServerHop()
+    pressKey(Enum.KeyCode.Three)
+    task.wait(0.5)
+
+    local mapMenu = watchContainer:FindFirstChild("MapMenu")
+    if not mapMenu then return end
+
+    local tabs = getTabButtons(mapMenu)
+    if #tabs < 3 then return end
+
+    click(tabs, 0.5, 2.5)
+    click(tabs, 0.5, 3)
+    click(tabs, 0.5, 3.5)
+    click(tabs, 0.5, 4)
+    task.wait(0.5)
+    
+    local targetButton = PlayerGui:FindFirstChild("TeleportButton1", true) 
+        or PlayerGui:FindFirstChild("teleportbutton1", true)
+    
+    if targetButton and (targetButton:IsA("TextButton") or targetButton:IsA("ImageButton")) then
+        click(targetButton, 0.5, 1)
+        print("[BOT SUCCESS] Found and clicked TeleportButton1 inline!")
+    end
+
+end
+
+
+
+-- TIMER THREAD
+task.spawn(function()
+    local serverStartTime = os.time() 
+    
+    while task.wait(10) do 
+        local timeElapsed = os.time() - serverStartTime
+        
+        if timeElapsed >= HopInterval then
+            -- 1. FORCE EGG VACUUM LOOPS TO FREEZE INSTANTLY
+            isHoppingTime = true 
+            
+            -- 2. Execute your menu click sequence
+            executeServerHop()
+        end
+    end
+end)
+
 -- MAIN LOOP
 while true do
     if not raidCaveExists() then
@@ -336,7 +385,7 @@ while true do
     end 
 
         while raidCaveExists() do
-        if not isEncounterStarting() and not isGeohopping and not isTeleportingToGate then  -- add isGeohopping check
+        if not isEncounterStarting() and not isGeohopping and not isTeleportingToGate and not isHoppingTime then  -- add isGeohopping check
             for _, v in ipairs(workspace:GetDescendants()) do
                 if v.Name == "Egg" and v:IsA("BasePart")
                     and not v:IsDescendantOf(workspace.CurrentCamera)
@@ -351,3 +400,4 @@ while true do
         task.wait()
     end
 end
+
