@@ -325,7 +325,7 @@ local function isEncounterStarting()
     return encounterFiring
 end
 
-local HopInterval = 100 -- 35 minutes in seconds
+local HopInterval = 2100 -- 35 minutes in seconds
 
 local isHoppingTime = false 
 
