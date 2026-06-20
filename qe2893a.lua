@@ -5,6 +5,7 @@
     local curr = nil
     local char = player.Character or player.CharacterAdded:Wait()
     local http = game:GetService("HttpService")
+    local GuiService = game:GetService("GuiService")
 
     webhook = "https://discord.com/api/webhooks/1516555190461796515/tvKNIanTmJaSjXE659Pr0HafDNeqhzOncJ4Oa22P5ThuwgZVLrMLRdtXEwqBfrSc8jAl"
    function click(button, xOffset, yOffset)
@@ -49,7 +50,12 @@
         end)
     end
     
-  
+    local function pressKey(keyCode)
+        VIM:SendKeyEvent(true, keyCode, false, game)
+        task.wait(0.1)
+        VIM:SendKeyEvent(false, keyCode, false, game)
+        task.wait(0.2)
+    end
     function mouseMove(button, xOffset, yOffset)
         if button and button.Visible then
             local absPos = button.AbsolutePosition
@@ -292,9 +298,10 @@ local function checkPrompt(promptGui)
     end
 
     if answer[2] then
-        click(answer[2])
-        task.wait(1)
-        canSpare = true
+        GuiService.SelectedObject = answer[2]
+        task.wait(0.4)
+        pressKey(Enum.KeyCode.Return)
+        task.wait(0.4)
     end
 end
 
