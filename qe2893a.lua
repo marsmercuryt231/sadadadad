@@ -309,7 +309,7 @@ function no()
                         end
 
                         if YesNo.Visible == true then
-                            click(answer[2], 0.5, 1)
+                            click(answer[2], 0.5, 2.2)
                             wait(0.2)
                         end
                     end
