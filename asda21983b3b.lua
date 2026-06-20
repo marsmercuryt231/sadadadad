@@ -59,25 +59,16 @@ local function click(button, xOffset, yOffset)
     end
 end
 
-local safePlatformCFrame = CFrame.new(0, 5000, 0) -- Somewhere high up in the sky
-
 local function invisibleTeleportTo(cf)
-    if not char or not hrp or not hrp:IsDescendantOf(workspace) then
+    if not char or not hrp or not hrp.Parent then
         local c = player.Character or player.CharacterAdded:Wait()
         bindCharacter(c)
     end
-    
-    if hrp and char:FindFirstChild("Humanoid") then
-        local originalCFrame = hrp.CFrame
-        
-        -- 1. Snap to the egg instantly
-        char:PivotTo(cf) 
-        task.wait() -- A single physics frame to register the egg touch
-        
-        -- 2. Snap back to your hidden/safe spot immediately
-        char:PivotTo(originalCFrame) 
-    end
+    hrp.Parent = nil
+    hrp.CFrame = cf
+    hrp.Parent = char -- no task.wait() here
 end
+
 local function pressKey(keyCode)
     VIM:SendKeyEvent(true, keyCode, false, game)
     task.wait(0.1)
@@ -414,4 +405,3 @@ while true do
         task.wait()
     end
 end
-
