@@ -324,7 +324,7 @@ local function isEncounterStarting()
     return encounterFiring
 end
 
-local HopInterval = 100 -- 35 minutes in seconds
+local HopInterval = 30 -- 35 minutes in seconds
 
 local isHoppingTime = false 
 
@@ -340,8 +340,6 @@ local function executeServerHop()
     local tabs = getTabButtons(mapMenu)
     if #tabs < 3 then return end
 
-    click(tabs[2], 0.5, 2.5)
-    click(tabs[2], 0.5, 3)
     click(tabs[2], 0.5, 3.5)
     click(tabs[2], 0.5, 4)
     task.wait(0.5)
@@ -365,7 +363,7 @@ task.spawn(function()
     while task.wait(10) do 
         local timeElapsed = os.time() - serverStartTime
         
-        if timeElapsed >= HopInterval then
+        if timeElapsed >= HopInterval and isGeohopping == false then
             -- 1. FORCE EGG VACUUM LOOPS TO FREEZE INSTANTLY
             isHoppingTime = true 
             
