@@ -288,34 +288,43 @@ end)
 
 local PlayerGui = player:WaitForChild("PlayerGui")
 
-local function checkPrompt(promptGui)
-    if not promptGui.Visible then return end
+function no()
+        while true do
 
-    local answer = {}
-    for _, v in ipairs(promptGui:GetChildren()) do
-        if v:IsA("ImageButton") then
-            table.insert(answer, v)
+            if Players.LocalPlayer.PlayerGui.FrontGui and Players.LocalPlayer.PlayerGui.FrontGui:FindFirstChild("YesOrNoPrompt") then
+
+                local YesNo  = Players.LocalPlayer.PlayerGui.FrontGui.YesOrNoPrompt:GetChildren()
+                local answer = {}
+
+                for i, v in pairs(YesNo) do
+                    if Players.LocalPlayer.PlayerGui.FrontGui and Players.LocalPlayer.PlayerGui.FrontGui:FindFirstChild("YesOrNoPrompt") then
+                            
+                        local YesNo  = Players.LocalPlayer.PlayerGui.FrontGui.YesOrNoPrompt
+                        local answer = {}
+                        
+                        for i, v in pairs(YesNo:GetChildren()) do
+                            if v:IsA("ImageButton") then
+                                table.insert(answer, v)
+                            end
+                        end
+
+                        if YesNo.Visible == true then
+                            click(answer[2], 2, 4)
+                            wait(0.2)
+                        end
+                    end
+                    wait(0.05)
+                end
+            end
+            wait()
         end
     end
 
-    if not answer[2] then return end
+local noTask = coroutine.create(no)
+coroutine.resume(noTask)
 
-    local startTime = tick()
-    while promptGui.Visible and (tick() - startTime) < 30 do
-        click(answer[2], 2, 4)
-        task.wait(0.5)
-    end
 
-end
 
-PlayerGui.DescendantAdded:Connect(function(descendant)
-    if descendant.Name == "YesOrNoPrompt" then
-        checkPrompt(descendant)
-        descendant:GetPropertyChangedSignal("Visible"):Connect(function()
-            checkPrompt(descendant)
-        end)
-    end
-end)
 
 while true do
     for _, v in ipairs(game.Workspace:GetDescendants()) do
