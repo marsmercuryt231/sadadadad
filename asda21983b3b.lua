@@ -324,7 +324,7 @@ local function isEncounterStarting()
     return encounterFiring
 end
 
-local HopInterval = 30 -- 35 minutes in seconds
+local HopInterval = 100 -- 35 minutes in seconds
 
 local isHoppingTime = false 
 
@@ -346,8 +346,8 @@ local function executeServerHop()
     click(tabs[2], 0.5, 4)
     task.wait(0.5)
     
-    local targetButton = PlayerGui:FindFirstChild("TeleportButton1", true) 
-        or PlayerGui:FindFirstChild("teleportbutton1", true)
+    local targetButton = player.PlayerGui:FindFirstChild("TeleportButton1", true) 
+        or player.PlayerGui:FindFirstChild("teleportbutton1", true)
     
     if targetButton and (targetButton:IsA("TextButton") or targetButton:IsA("ImageButton")) then
         click(targetButton, 0.5, 1)
