@@ -329,6 +329,8 @@ local HopInterval = 100 -- 35 minutes in seconds
 local isHoppingTime = false 
 
 local function executeServerHop()
+    local watchContainer = player.PlayerGui.MainGui:FindFirstChild("WatchContainer")
+
     pressKey(Enum.KeyCode.Three)
     task.wait(0.5)
 
