@@ -340,15 +340,20 @@ local function executeServerHop()
     local tabs = getTabButtons(mapMenu)
     if #tabs < 3 then return end
 
-    click(tabs[2], 0.5, 3.5)
-    click(tabs[2], 0.5, 4)
+    GuiService.SelectedObject = tabs[2]
+    task.wait(math.random(20, 50) / 100) 
+
+    pressKey(Enum.KeyCode.Return)
     task.wait(0.5)
     
     local targetButton = player.PlayerGui:FindFirstChild("TeleportButton1", true) 
         or player.PlayerGui:FindFirstChild("teleportbutton1", true)
     
+    
     if targetButton and (targetButton:IsA("TextButton") or targetButton:IsA("ImageButton")) then
-        click(targetButton, 0.5, 1)
+        GuiService.SelectedObject = targetButton
+        task.wait(math.random(20, 50) / 100) 
+        pressKey(Enum.KeyCode.Return)
         print("[BOT SUCCESS] Found and clicked TeleportButton1 inline!")
     end
 
