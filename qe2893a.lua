@@ -263,7 +263,7 @@ local mainGui = player.PlayerGui:WaitForChild("MainGui")
 
 mainGui.DescendantAdded:Connect(function(child)
     if child.Name == "BattleGui" then
-        task.wait(0.2)
+        task.wait(0.5)
         local plat = game.Workspace:FindFirstChild("Plat21", true)
         if plat then
             onEncounterStart(plat)
@@ -282,14 +282,15 @@ while true do
         if v:IsA("Model") and string.find(string.lower(v.Name), "trainer", 1, true) then
             v:Destroy()
         end
-        if v.Name == "Door" and v.Parent.Name ~= "Gate" then
+        if (v.Name == "Door" and v.Parent.Name ~= "Gate") or v.Name == "Grass" then
             v:Destroy()
         end
+        
     end
     task.wait(1)
 end
 
-    
+
    
 --771860314 particle id
 
