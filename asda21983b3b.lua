@@ -1,5 +1,6 @@
 local VIM = game:GetService("VirtualInputManager")
 local player = game.Players.LocalPlayer
+local GuiService = game:GetService("GuiService")
 
 local equivalency = {
     ["Route 6"] = { location = "Rally Ranch" },
