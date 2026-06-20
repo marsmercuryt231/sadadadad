@@ -324,7 +324,7 @@ local function isEncounterStarting()
     return encounterFiring
 end
 
-local HopInterval = 300 -- 35 minutes in seconds
+local HopInterval = 100 -- 35 minutes in seconds
 
 local isHoppingTime = false 
 
@@ -338,10 +338,10 @@ local function executeServerHop()
     local tabs = getTabButtons(mapMenu)
     if #tabs < 3 then return end
 
-    click(tabs, 0.5, 2.5)
-    click(tabs, 0.5, 3)
-    click(tabs, 0.5, 3.5)
-    click(tabs, 0.5, 4)
+    click(tabs[2], 0.5, 2.5)
+    click(tabs[2], 0.5, 3)
+    click(tabs[2], 0.5, 3.5)
+    click(tabs[2], 0.5, 4)
     task.wait(0.5)
     
     local targetButton = PlayerGui:FindFirstChild("TeleportButton1", true) 
