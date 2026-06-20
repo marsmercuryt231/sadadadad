@@ -277,6 +277,36 @@ mainGui.DescendantRemoving:Connect(function(child)
     end
 end)
 
+
+
+local PlayerGui = player:WaitForChild("PlayerGui")
+
+local function checkPrompt(promptGui)
+    if not promptGui.Visible then return end
+
+    local answer = {}
+    for _, v in ipairs(promptGui:GetChildren()) do
+        if v:IsA("ImageButton") then
+            table.insert(answer, v)
+        end
+    end
+
+    if answer[2] then
+        click(answer[2])
+        task.wait(1)
+        canSpare = true
+    end
+end
+
+PlayerGui.DescendantAdded:Connect(function(descendant)
+    if descendant.Name == "YesOrNoPrompt" then
+        checkPrompt(descendant)
+        descendant:GetPropertyChangedSignal("Visible"):Connect(function()
+            checkPrompt(descendant)
+        end)
+    end
+end)
+
 while true do
     for _, v in ipairs(game.Workspace:GetDescendants()) do
         if v:IsA("Model") and string.find(string.lower(v.Name), "trainer", 1, true) then
