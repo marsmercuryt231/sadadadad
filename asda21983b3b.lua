@@ -340,7 +340,7 @@ local function executeServerHop()
 
     local tabs = getTabButtons(mapMenu)
     if #tabs < 3 then return end
-
+    task.wait(0.5)
     GuiService.SelectedObject = tabs[2]
     task.wait(math.random(20, 50) / 100) 
 
