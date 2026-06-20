@@ -325,7 +325,7 @@ local function isEncounterStarting()
     return encounterFiring
 end
 
-local HopInterval = 30 -- 35 minutes in seconds
+local HopInterval = 100 -- 35 minutes in seconds
 
 local isHoppingTime = false 
 
@@ -340,9 +340,10 @@ local function executeServerHop()
 
     local tabs = getTabButtons(mapMenu)
     if #tabs < 3 then return end
-    task.wait(0.5)
     GuiService.SelectedObject = tabs[2]
+
     task.wait(math.random(20, 50) / 100) 
+    GuiService.SelectedObject = tabs[2]
 
     pressKey(Enum.KeyCode.Return)
     task.wait(0.5)
@@ -352,9 +353,7 @@ local function executeServerHop()
     
     
     if targetButton and (targetButton:IsA("TextButton") or targetButton:IsA("ImageButton")) then
-        GuiService.SelectedObject = targetButton
-        task.wait(math.random(20, 50) / 100) 
-        pressKey(Enum.KeyCode.Return)
+        click(targetButton.Frame.TextLabel, 0.75, 6)
         print("[BOT SUCCESS] Found and clicked TeleportButton1 inline!")
     end
 
@@ -366,7 +365,7 @@ end
 task.spawn(function()
     local serverStartTime = os.time() 
     
-    while task.wait(10) do 
+    while task.wait(5) do 
         local timeElapsed = os.time() - serverStartTime
         
         if timeElapsed >= HopInterval and isGeohopping == false then
