@@ -397,7 +397,7 @@ while true do
                     and not isTooCloseToDoor(v.Position) then
                     if isEncounterStarting() then break end
                     invisibleTeleportTo(v.CFrame)
-                    task.wait()
+                    task.wait(0.35)
                     if isEncounterStarting() then break end
                 end
             end
