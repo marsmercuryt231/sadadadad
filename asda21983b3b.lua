@@ -64,9 +64,9 @@ local function invisibleTeleportTo(cf)
         local c = player.Character or player.CharacterAdded:Wait()
         bindCharacter(c)
     end
-    --hrp.Parent = nil
+    hrp.Parent = nil
     hrp.CFrame = cf
-    --hrp.Parent = char -- no task.wait() here
+    hrp.Parent = char -- no task.wait() here
 end
 
 local function pressKey(keyCode)
@@ -372,7 +372,7 @@ task.spawn(function()
         
         if timeElapsed >= HopInterval and isGeohopping == false then
             -- 1. FORCE EGG VACUUM LOOPS TO FREEZE INSTANTLY
-            isHoppingTime = true 
+            --isHoppingTime = true 
             
             -- 2. Execute your menu click sequence
             --executeServerHop()
