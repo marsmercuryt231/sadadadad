@@ -64,9 +64,9 @@ local function invisibleTeleportTo(cf)
         local c = player.Character or player.CharacterAdded:Wait()
         bindCharacter(c)
     end
-    --hrp.Parent = nil
+    hrp.Parent = nil
     hrp.CFrame = cf
-    --hrp.Parent = char -- no task.wait() here
+    hrp.Parent = char -- no task.wait() here
 end
 
 local function pressKey(keyCode)
@@ -392,7 +392,7 @@ while true do
     end 
 
         while raidCaveExists() do
-        if not isEncounterStarting() and not isGeohopping and not isTeleportingToGate and not isHoppingTime then  -- add isGeohopping check
+        if not isEncounterStarting() and not isGeohopping and not isTeleportingToGate and not isHoppingTime and not player.PlayerGui.MainGui:FindFirstChild("BattleGui") then  -- add isGeohopping check
             for _, v in ipairs(workspace:GetDescendants()) do
                 if v.Name == "Egg" and v:IsA("BasePart")
                     and not v:IsDescendantOf(workspace.CurrentCamera)
