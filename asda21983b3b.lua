@@ -375,7 +375,7 @@ task.spawn(function()
             isHoppingTime = true 
             
             -- 2. Execute your menu click sequence
-            executeServerHop()
+            --executeServerHop()
         end
     end
 end)
