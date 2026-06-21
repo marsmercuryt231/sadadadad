@@ -189,7 +189,7 @@ local function teleportToGate(destination)
     local targetCFrame = CFrame.new(marquee.Position - Vector3.new(0, 10, 0))
 
     local elapsed = 0
-    while elapsed < 3 do
+    while elapsed < 9 do
         local character = player.Character
         if character then
             local rootPart = character:FindFirstChild("HumanoidRootPart")
@@ -197,8 +197,8 @@ local function teleportToGate(destination)
                 rootPart.CFrame = targetCFrame
             end
         end
-        task.wait(1)
-        elapsed += 1
+        task.wait(3)
+        elapsed += 3
     end
     isTeleportingToGate = false
 end
