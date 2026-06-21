@@ -181,6 +181,7 @@ end
 local isTeleportingToGate = false
 
 local function teleportToGate(destination)
+    wait(3)
     isTeleportingToGate = true
     local marquee = waitForGate(destination, 10)
     if not marquee then print("Gate not found after timeout:", destination) return end
