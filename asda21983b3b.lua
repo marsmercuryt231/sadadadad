@@ -181,7 +181,7 @@ end
 local isTeleportingToGate = false
 
 local function teleportToGate(destination)
-    wait(3)
+    wait(1)
     isTeleportingToGate = true
     local marquee = waitForGate(destination, 10)
     if not marquee then print("Gate not found after timeout:", destination) return end
@@ -201,6 +201,7 @@ local function teleportToGate(destination)
         elapsed += 3
     end
     isTeleportingToGate = false
+    wait(5)
 end
 
 local function raidCaveExists()
