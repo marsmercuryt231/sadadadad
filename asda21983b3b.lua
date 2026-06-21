@@ -381,26 +381,42 @@ task.spawn(function()
 end)
 
 -- MAIN LOOP
+-- MAIN LOOP
 while true do
     if not raidCaveExists() then
         isGeohopping = true
         run()
-        waitForRaidCave(5)  -- this already waits for the new chunk
-        task.wait(2)        -- little extra buffer after chunk loads
+        waitForRaidCave(5)
+        task.wait(2)
         isGeohopping = false
         continue
     end 
 
-        while raidCaveExists() do
-        if not encounterFiring and not isGeohopping and not isTeleportingToGate and not isHoppingTime and not player.PlayerGui.MainGui:FindFirstChild("BattleGui") then  -- add isGeohopping check
+    while raidCaveExists() do
+        -- Top-level safety check
+        local mainGui = player.PlayerGui:FindFirstChild("MainGui")
+        local hasBattleGui = mainGui and mainGui:FindFirstChild("BattleGui")
+
+        if not encounterFiring and not isGeohopping and not isTeleportingToGate and not isHoppingTime and not hasBattleGui then
+            
             for _, v in ipairs(workspace:GetDescendants()) do
+                -- Mid-loop safety check: If a battle starts while searching, break out instantly
+                local liveBattleGui = mainGui and mainGui:FindFirstChild("BattleGui")
+                if isEncounterStarting() or liveBattleGui then 
+                    break 
+                end
+
                 if v.Name == "Egg" and v:IsA("BasePart")
                     and not v:IsDescendantOf(workspace.CurrentCamera)
                     and not isTooCloseToDoor(v.Position) then
-                    if isEncounterStarting() then break end
+                    
+                    -- Final safety check right before the teleport trigger
+                    if isEncounterStarting() or (mainGui and mainGui:FindFirstChild("BattleGui")) then 
+                        break 
+                    end
+
                     invisibleTeleportTo(v.CFrame)
                     task.wait(0.4)
-                    if isEncounterStarting() then break end
                 end
             end
         end
