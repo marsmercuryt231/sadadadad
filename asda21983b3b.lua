@@ -392,7 +392,7 @@ while true do
     end 
 
         while raidCaveExists() do
-        if not isEncounterStarting() and not isGeohopping and not isTeleportingToGate and not isHoppingTime and not player.PlayerGui.MainGui:FindFirstChild("BattleGui") then  -- add isGeohopping check
+        if not encounterFiring and not isGeohopping and not isTeleportingToGate and not isHoppingTime and not player.PlayerGui.MainGui:FindFirstChild("BattleGui") then  -- add isGeohopping check
             for _, v in ipairs(workspace:GetDescendants()) do
                 if v.Name == "Egg" and v:IsA("BasePart")
                     and not v:IsDescendantOf(workspace.CurrentCamera)
