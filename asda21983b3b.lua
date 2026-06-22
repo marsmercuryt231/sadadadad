@@ -64,9 +64,7 @@ local function invisibleTeleportTo(cf)
         local c = player.Character or player.CharacterAdded:Wait()
         bindCharacter(c)
     end
-    hrp.Parent = nil
     hrp.CFrame = cf
-    hrp.Parent = char -- no task.wait() here
 end
 
 local function pressKey(keyCode)
