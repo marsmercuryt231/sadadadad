@@ -82,7 +82,7 @@
     }
     
     local temp = {
-        "kyeggo-r"
+        "rainbow"
     }
 
 
