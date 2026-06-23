@@ -74,15 +74,15 @@
     
 
     local Alphas = {
-        "star", "kyeggo-r", "pattern", "fab"
+        "star", "pattern4", "fab"
     }
     
     local Gammas = {
-        "star", "kyeggo-r", "pattern", "fab"
+        "star", "kyeggo-r", "pattern", "fab", "kyeggo"
     }
     
     local temp = {
-        "rainbow"
+        
     }
 
 
