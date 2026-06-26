@@ -3,6 +3,7 @@
     local name = Players.LocalPlayer.Name
     local VIM = game:GetService("VirtualInputManager")
     local curr = nil
+    local currGleam = nil
     local char = player.Character or player.CharacterAdded:Wait()
     local http = game:GetService("HttpService")
     local GuiService = game:GetService("GuiService")
@@ -33,7 +34,7 @@
                 ["embeds"] = {
                     {
                         ["title"] = "Wilk Bot",
-                        ["description"] = player.Name.." has found a "..gleam(curr).." "..msg,
+                        ["description"] = player.Name.." has found a "..currGleam.." "..msg,
                         ["type"] = "rich",
                         ["color"] = tonumber(string.format("0x%X", math.random(0x000000, 0xFFFFFF))),
                     }
@@ -74,15 +75,15 @@
     
 
     local Alphas = {
-        "star", "pattern4", "fab"
+        "kyeggo-r", "pattern4", "fab"
     }
     
     local Gammas = {
-        "star", "kyeggo-r", "pattern", "fab", "kyeggo"
+        "kyeggo-r", "pattern", "fab"
     }
     
     local temp = {
-        
+
     }
 
 
@@ -135,8 +136,11 @@ function gleam(entity)
             end
         end
         if string.find(v.Name, "Wisp") then
+            print(v.Name .. "YA")
             prefix = "Gamma"
+            return prefix 
         end
+        print(v.Name .. "NA")
     end
     if prefix == nil then prefix = "Normal" end
     return prefix
@@ -224,10 +228,13 @@ local function onEncounterStart(plat)
             if v.Name ~= "Plat21" and v.Parent.Name ~= "Double" then
                 local kind = gleam(v)
                 print(v.Name, kind)
+                print("checking against Alphas:", containsSubstringFromTable(v.Name, Alphas))
+                print("checking against Gammas:", containsSubstringFromTable(v.Name, Gammas))
                 if (containsSubstringFromTable(v.Name, Alphas) and kind == "Alpha")
                     or (containsSubstringFromTable(v.Name, Gammas) and kind == "Gamma")
                     or (containsSubstringFromTable(v.Name, temp)) then
                     curr = v
+                    currGleam = kind
                     while true do
                         runEncounterActions()
                         local mainFrame = Players.LocalPlayer.PlayerGui.MainGui
@@ -263,6 +270,7 @@ local function onEncounterEnd()
         SendWebhook(curr.Name)
     end
     curr = nil
+    currGleam = nil
 end
 
 local mainGui = player.PlayerGui:WaitForChild("MainGui")
@@ -331,17 +339,14 @@ while true do
         if v:IsA("Model") and string.find(string.lower(v.Name), "trainer", 1, true) then
             v:Destroy()
         end
-        
         if (v.Name == "Door" and v.Parent.Name ~= "Gate") or v.Name == "Grass" then
             v:Destroy()
         end
         
-        if string.find(string.lower(v.Name), "cavedoor", 1, true) then
-            v:Destroy()
-        end
     end
     task.wait(1)
 end
+
 
    
 --771860314 particle id
