@@ -360,25 +360,7 @@ task.spawn(function()
 end)
 
 -- menu clicker runs freely after
-local deadline = os.time() + 30
-local clicked = false
-while os.time() < deadline and not clicked do
-    for _, v in ipairs(player.PlayerGui:GetDescendants()) do
-        if v:IsA("ImageButton") and v.Visible and v.Name == "RoundedFrame" then
-            local frameChildren = 0
-            for _, c in ipairs(v:GetChildren()) do
-                if c.Name == "Frame" then frameChildren += 1 end
-            end
-            if frameChildren == 2 then
-                click(v, 0.75, 2)
-                clicked = true
-                wait(10)
-                break
-            end
-        end
-    end
-    task.wait(0.5)
-end
+
    
 --771860314 particle id
 
