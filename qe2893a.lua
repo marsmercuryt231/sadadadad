@@ -223,7 +223,7 @@ local function onEncounterStart(plat)
         local Scene = plat.Parent:GetDescendants()
         print("scene size:", #Scene)
         for _, v in ipairs(Scene) do
-            if v.Name ~= "Plat21" and v.Parent.Name ~= "Double" then
+            if v.Name ~= "Plat21" and v.Parent.Name ~= "Double" and not string.find(string.lower(v), "plat") then
                 local kind = gleam(v)
                 print(v.Name, kind)
                 if (containsSubstringFromTable(v.Name, Alphas) and kind == "Alpha")
