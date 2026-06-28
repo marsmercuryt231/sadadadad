@@ -277,7 +277,7 @@ local lastEncounterTime = os.time()
 mainGui.DescendantAdded:Connect(function(child)
     if child.Name == "BattleGui" then
         lastEncounterTime = os.time()
-        task.wait(0.5)
+        task.wait(2)
         local plat = game.Workspace:FindFirstChild("Plat21", true)
         if plat then
             onEncounterStart(plat)
