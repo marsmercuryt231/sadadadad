@@ -342,22 +342,42 @@ coroutine.resume(noTask)
 
 
 
-while true do
-    for _, v in ipairs(game.Workspace:GetDescendants()) do
-        if v:IsA("Model") and string.find(string.lower(v.Name), "trainer", 1, true) then
-            v:Destroy()
+task.spawn(function()
+    while true do
+        for _, v in ipairs(game.Workspace:GetDescendants()) do
+            if v:IsA("Model") and string.find(string.lower(v.Name), "trainer", 1, true) then
+                v:Destroy()
+            end
+            if (v.Name == "Door" and v.Parent.Name ~= "Gate") or v.Name == "Grass" then
+                v:Destroy()
+            end
+            if string.find(string.lower(v.Name), "cavedoor", 1, true) then
+                v:Destroy()
+            end
         end
-        if (v.Name == "Door" and v.Parent.Name ~= "Gate") or v.Name == "Grass" then
-            v:Destroy()
-        end
-        if string.find(string.lower(v.Name), "cavedoor", 1, true) then
-            v:Destroy()
+        task.wait(1)
+    end
+end)
+
+-- menu clicker runs freely after
+local deadline = os.time() + 30
+local clicked = false
+while os.time() < deadline and not clicked do
+    for _, v in ipairs(player.PlayerGui:GetDescendants()) do
+        if v:IsA("ImageButton") and v.Visible and v.Name == "RoundedFrame" then
+            local frameChildren = 0
+            for _, c in ipairs(v:GetChildren()) do
+                if c.Name == "Frame" then frameChildren += 1 end
+            end
+            if frameChildren == 2 then
+                click(v, 0.75, 2)
+                clicked = true
+                break
+            end
         end
     end
-    task.wait(1)
+    task.wait(0.5)
 end
-
-
    
 --771860314 particle id
 
