@@ -396,7 +396,7 @@ while true do
         local mainGui = player.PlayerGui:FindFirstChild("MainGui")
         local hasBattleGui = mainGui and mainGui:FindFirstChild("BattleGui")
 
-        if not encounterFiring and not isGeohopping and not isTeleportingToGate and not isHoppingTime and not hasBattleGui and mainGui.OutsetContainerBeyondSafe:FindFirstChild("FadeGui").Transparency == 1 then
+        if not encounterFiring and not isGeohopping and not isTeleportingToGate and not isHoppingTime and not hasBattleGui then
 
             
             for _, v in ipairs(workspace:GetDescendants()) do
