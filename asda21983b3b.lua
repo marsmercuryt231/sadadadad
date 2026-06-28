@@ -199,7 +199,7 @@ local function teleportToGate(destination)
         elapsed += 3
     end
     isTeleportingToGate = false
-    wait(10)
+    wait(5)
 end
 
 local function raidCaveExists()
