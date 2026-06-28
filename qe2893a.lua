@@ -271,12 +271,24 @@ end
 
 local mainGui = player.PlayerGui:WaitForChild("MainGui")
 
+local lastEncounterTime = os.time()
+
 mainGui.DescendantAdded:Connect(function(child)
     if child.Name == "BattleGui" then
+        lastEncounterTime = os.time()
         task.wait(0.5)
         local plat = game.Workspace:FindFirstChild("Plat21", true)
         if plat then
             onEncounterStart(plat)
+        end
+    end
+end)
+
+task.spawn(function()
+    while task.wait(10) do
+        if os.time() - lastEncounterTime > 120 then
+            print("No encounter in 2 minutes, reconnecting...")
+            game:GetService("TeleportService"):Teleport(game.PlaceId, player)
         end
     end
 end)
