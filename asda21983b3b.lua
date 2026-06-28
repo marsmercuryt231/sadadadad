@@ -131,7 +131,6 @@ local function clickGeoHop(locationName, locationsScrollingFrame)
                     local button = sibling:FindFirstChildOfClass("ImageButton")
                     if button then
                         scrollToAndClick(button, locationsScrollingFrame)
-                        task.wait(10)
                         return
                     end
                 end
