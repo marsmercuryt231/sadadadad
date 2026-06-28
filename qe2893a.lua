@@ -229,6 +229,7 @@ local function onEncounterStart(plat)
                 if (containsSubstringFromTable(v.Name, Alphas) and kind == "Alpha")
                     or (containsSubstringFromTable(v.Name, Gammas) and kind == "Gamma")
                     or (containsSubstringFromTable(v.Name, temp)) then
+                    print("MATCHED:", v.Name, kind)
                     curr = v
                     currGleam = kind
                     while true do
