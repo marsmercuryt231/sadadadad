@@ -387,7 +387,7 @@ while true do
         waitForRaidCave(5)
         task.wait(2)
         isGeohopping = false
-        task.wait(3)
+        task.wait(6)
         continue
     end 
 
