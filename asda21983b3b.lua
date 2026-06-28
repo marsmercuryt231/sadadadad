@@ -396,7 +396,8 @@ while true do
         local mainGui = player.PlayerGui:FindFirstChild("MainGui")
         local hasBattleGui = mainGui and mainGui:FindFirstChild("BattleGui")
 
-        if not encounterFiring and not isGeohopping and not isTeleportingToGate and not isHoppingTime and not hasBattleGui then
+        if not encounterFiring and not isGeohopping and not isTeleportingToGate and not isHoppingTime and not hasBattleGui and not MainGui.OutsetContainerBeyondSafe:FindFirstChild("FadeGui") then
+
             
             for _, v in ipairs(workspace:GetDescendants()) do
                 -- Mid-loop safety check: If a battle starts while searching, break out instantly
