@@ -199,7 +199,7 @@ local function teleportToGate(destination)
         elapsed += 3
     end
     isTeleportingToGate = false
-    wait(5)
+    wait(10)
 end
 
 local function raidCaveExists()
@@ -387,7 +387,7 @@ while true do
         waitForRaidCave(5)
         task.wait(2)
         isGeohopping = false
-        task.wait(10)
+        task.wait(3)
         continue
     end 
 
