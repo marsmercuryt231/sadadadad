@@ -372,6 +372,7 @@ while os.time() < deadline and not clicked do
             if frameChildren == 2 then
                 click(v, 0.75, 2)
                 clicked = true
+                wait(10)
                 break
             end
         end
